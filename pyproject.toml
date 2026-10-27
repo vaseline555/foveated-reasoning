@@ -1,0 +1,33 @@
+[project]
+name = "active-vlm"
+version = "0.1.0"
+description = "Crop-only active visual reasoning with FOVEA and evidence graphs"
+requires-python = ">=3.12"
+readme = "README.md"
+license = "MIT"
+dependencies = ["Pillow==12.2.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.4", "ruff>=0.8"]
+
+[project.scripts]
+active-vlm = "active_vlm.experiment.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["active_vlm*"]
+
+[tool.setuptools.package-data]
+"active_vlm.baselines" = ["templates/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP"]

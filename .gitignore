@@ -1,0 +1,38 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*api-key*
+credentials*.json
+
+# Benchmarks, inference outputs and local state
+/data/
+/results/
+/experiments/
+/output/
+*.log
+*.jsonl
+*.tsv
+*.zip
+*.tar*
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.pdf
+*.pptx
+
+# Python/build/editor caches
+.venv*/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage*
+htmlcov/
+*.egg-info/
+build/
+dist/
+.DS_Store

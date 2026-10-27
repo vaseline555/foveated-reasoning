@@ -1,0 +1,4 @@
+FOVEA baseline policies, image transforms, and prompt templates are adapted from
+https://github.com/iamlilAJ/active-vlm under the MIT License.
+Original authors and copyright notices are retained in LICENSE.
+The standalone transport, evaluation runner, and evidence graph method are local additions.
