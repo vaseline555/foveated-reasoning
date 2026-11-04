@@ -36,3 +36,11 @@ htmlcov/
 build/
 dist/
 .DS_Store
+
+# Campaign runtime artifacts (source only)
+**/runs/
+**/run-v2/
+**/accepted/
+**/round-*/
+*.sqlite*
+*.lock

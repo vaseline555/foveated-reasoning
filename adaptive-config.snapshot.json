@@ -1,0 +1,79 @@
+{
+  "created_at": 1793751949.371965,
+  "method": "ADAPTIVE_V4",
+  "shared_root": "/workspace/fovea-reproduction-8b-recovery/runs/vstar191-8b-only-20261103",
+  "shared_global_cap_usd": 15,
+  "historical_in_shared_cap": 0.92410405,
+  "models": {
+    "primary": {
+      "id": "qwen/qwen3-vl-8b-instruct",
+      "prompt_price": 0.25,
+      "completion_price": 0.75,
+      "context_length": 262144,
+      "provider": {
+        "only": [
+          "Parasail"
+        ],
+        "allow_fallbacks": false,
+        "require_parameters": true
+      }
+    },
+    "fallback": {
+      "id": "qwen/qwen3-vl-8b-instruct",
+      "prompt_price": 0.25,
+      "completion_price": 0.75,
+      "context_length": 262144,
+      "provider": {
+        "only": [
+          "Parasail"
+        ],
+        "allow_fallbacks": false,
+        "require_parameters": true
+      }
+    }
+  },
+  "seed": 42,
+  "max_workers": 1,
+  "max_consecutive_structured_failures": 3,
+  "require_crop_observation_health": true,
+  "health_cases": [
+    "vstar_0",
+    "vstar_115",
+    "vstar_1"
+  ],
+  "max_tokens": 2048,
+  "temperature": 1.0,
+  "dispatch_interval_seconds": 3.0,
+  "limits": {
+    "max_steps": 10,
+    "max_model_calls": 24,
+    "max_candidates": 32,
+    "branch_steps": 1,
+    "progress_bonus": 1,
+    "no_progress_steps": 1,
+    "max_visits": 2
+  },
+  "source_hashes": {
+    "/workspace/fovea-official/src/cv_agent/policies/adaptive.py": "a2004a448d6b5644e939949ba459a5f65db801d5b7cee39cbd70912a51601bf5",
+    "/workspace/fovea-adaptive-experiment-v4/backend.py": "b21295d8e88408c9c970c2c3987229674c899b87fd0163556380d132851e9e9d",
+    "/workspace/fovea-adaptive-experiment-v4/transport.py": "c8f83b946ea75856c928370c016e31608144d41339067ff495be2aee37c75fcc",
+    "/workspace/fovea-adaptive-experiment-v4/run.py": "bf297b03630c823901e59f42c2f8121f165131b22689223d015920761e8f24e0",
+    "/workspace/fovea-adaptive-experiment-v4/supervisor.py": "a295696d249ae36b5e7d377f7055b857fe123374c829027bf8b3144d53cf6097",
+    "/workspace/fovea-reproduction-8b-recovery-v2/client.py": "ef8473f3282b8e26bc4e28edc82a04d7dcee0715d144fec34f07f3f5d8d4d6ab",
+    "/workspace/fovea-reproduction-8b-recovery-v2/official_adapter.py": "7830096b8dc2ca954e50bde8cedb4e89b613d7d342dd096a3b5e8b8037ac9692",
+    "/workspace/vstar-prepared/manifest.json": "dde244201706840735c88de96f76bab55b40f8b0a536efa35747e30eb6256a71",
+    "/workspace/fovea-reproduction-8b-recovery/runs/vstar191-8b-only-20261103/config-v2.json": "d32dd34987806ce23cbc6f25ef994a251851ad1d1a3419d7912e5b17503dff63"
+  },
+  "runtime_versions": {
+    "python": "3.12.14",
+    "Pillow": "12.3.0",
+    "jsonschema": "4.26.0"
+  },
+  "scope": "All191 pure8B with same model/provider, images, sampling and final Direct report as baselines.",
+  "differences": [
+    "Adaptive uses explicit role-plan/proposal/observation calls instead of Greedy 3x5 probes.",
+    "Hard maximum10 crops and24 logical backend calls including final; bounded format retries are billed.",
+    "No geometric merging, area rejection, center-distance ranking, or 30B fallback.",
+    "Dollar cost and pacing share the existing campaign ledger with concurrently running baselines."
+  ]
+}

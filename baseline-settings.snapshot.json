@@ -1,0 +1,64 @@
+{
+  "models": {
+    "primary": {
+      "id": "qwen/qwen3-vl-8b-instruct",
+      "prompt_price": 0.25,
+      "completion_price": 0.75,
+      "context_length": 262144,
+      "provider": {
+        "only": [
+          "Parasail"
+        ],
+        "allow_fallbacks": false,
+        "require_parameters": true
+      }
+    },
+    "fallback": {
+      "id": "qwen/qwen3-vl-8b-instruct",
+      "prompt_price": 0.25,
+      "completion_price": 0.75,
+      "context_length": 262144,
+      "provider": {
+        "only": [
+          "Parasail"
+        ],
+        "allow_fallbacks": false,
+        "require_parameters": true
+      }
+    }
+  },
+  "cap_usd": 15,
+  "seed": 42,
+  "workers": 1,
+  "dispatch_interval_seconds": 3.0,
+  "rate_retry_limit": 36,
+  "protocol": {
+    "scales": [
+      1.5,
+      1,
+      0.8
+    ],
+    "probes_per_candidate": 5,
+    "nominal_max_turns": 10,
+    "max_tokens": 2048,
+    "temperature": 1.0,
+    "tools": [
+      "cropping"
+    ],
+    "direct_shared_between_methods": true,
+    "fallback": "8B only; one same-payload format retry with seed+1; 30B disabled.",
+    "rate_limit": "Global 3s dispatch spacing and one worker; shared exponential cooldown on429; resume same request, pause on persistence.",
+    "runtime": "Official pure functions/prompts with local JPEG crops and metered OpenRouter adapter.",
+    "deviations": [
+      "Public crop-only configuration; paper may include additional tools.",
+      "Hosted providers and explicit seed/temperature; paper hosting may differ.",
+      "All inference uses hosted Qwen3-VL-8B-Instruct on Parasail BF16; no 30B inference.",
+      "Invalid final/probe outputs get one same-model same-prompt format retry; original attempts retained.",
+      "Planner stop accepts natural language; MCQ validation occurs only at Direct/final reader.",
+      "Greedy minimum-size failures are returned as tool errors for re-proposal, matching the official executor.",
+      "One tool call per planner response enforced, matching the official prompt and avoiding invalid multi-tool message ordering.",
+      "Local data URLs replace S3/MinIO/MCP hosting; crop arithmetic and JPEG quality preserved.",
+      "Nonempty Direct/final analyses are model outcomes: absent MCQ choices are NO_ANSWER and score zero; paid original responses are retained via explicit overlays."
+    ]
+  }
+}

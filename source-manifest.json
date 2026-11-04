@@ -1,0 +1,354 @@
+{
+  "fovea-reproduction-8b-recovery-v2/test_adapter.py": {
+    "source": "/workspace/fovea-reproduction-8b-recovery-v2/test_adapter.py",
+    "sha256": "6625fbbbb6c8f7672e0cb52ce1ce5631132bbfaeed87f3e6d6457c08da9ba7c4"
+  },
+  "fovea-reproduction-8b-recovery-v2/test_client.py": {
+    "source": "/workspace/fovea-reproduction-8b-recovery-v2/test_client.py",
+    "sha256": "06078bde10945562c4847a14f28489de9969bcbc075c0a740ee941d86e4cfca3"
+  },
+  "fovea-reproduction-8b-recovery-v2/test_audit_errors.py": {
+    "source": "/workspace/fovea-reproduction-8b-recovery-v2/test_audit_errors.py",
+    "sha256": "6f79bb118d46550ea802b0fd51d568870006f264a7ccd465f82c91aea67c5d98"
+  },
+  "fovea-reproduction-8b-recovery-v2/test_runner.py": {
+    "source": "/workspace/fovea-reproduction-8b-recovery-v2/test_runner.py",
+    "sha256": "0007c6a7dde3566dd1a9696a8342d3ba4009bc2663aa5270d4825de326ecc448"
+  },
+  "fovea-reproduction-8b-recovery-v2/official_adapter.py": {
+    "source": "/workspace/fovea-reproduction-8b-recovery-v2/official_adapter.py",
+    "sha256": "7830096b8dc2ca954e50bde8cedb4e89b613d7d342dd096a3b5e8b8037ac9692"
+  },
+  "fovea-reproduction-8b-recovery-v2/client.py": {
+    "source": "/workspace/fovea-reproduction-8b-recovery-v2/client.py",
+    "sha256": "ef8473f3282b8e26bc4e28edc82a04d7dcee0715d144fec34f07f3f5d8d4d6ab"
+  },
+  "fovea-reproduction-8b-recovery-v2/run.py": {
+    "source": "/workspace/fovea-reproduction-8b-recovery-v2/run.py",
+    "sha256": "5f1dc9ceb168df044d1df533b4cea1bdb05b257fd20fb1f9ff4538139d75e549"
+  },
+  "fovea-reproduction-8b-recovery-v2/audit_errors.py": {
+    "source": "/workspace/fovea-reproduction-8b-recovery-v2/audit_errors.py",
+    "sha256": "52dc4d0c2d7d4bff5784b7c1380e668c7ae7a5f38166c9e6c5dbf51406a08a26"
+  },
+  "fovea-adaptive-experiment-v4/backend.py": {
+    "source": "/workspace/fovea-adaptive-experiment-v4/backend.py",
+    "sha256": "b21295d8e88408c9c970c2c3987229674c899b87fd0163556380d132851e9e9d"
+  },
+  "fovea-adaptive-experiment-v4/transport.py": {
+    "source": "/workspace/fovea-adaptive-experiment-v4/transport.py",
+    "sha256": "c8f83b946ea75856c928370c016e31608144d41339067ff495be2aee37c75fcc"
+  },
+  "fovea-adaptive-experiment-v4/test_runner.py": {
+    "source": "/workspace/fovea-adaptive-experiment-v4/test_runner.py",
+    "sha256": "3a3c6b48b71c55553db374bb39583edfa3cc578051cf664f5da0514456067873"
+  },
+  "fovea-adaptive-experiment-v4/test_backend.py": {
+    "source": "/workspace/fovea-adaptive-experiment-v4/test_backend.py",
+    "sha256": "7d58b1c6cd5a3ec0350e418e6c19e2fbb245228285769f3d4ffce037dc2bb87c"
+  },
+  "fovea-adaptive-experiment-v4/supervisor.py": {
+    "source": "/workspace/fovea-adaptive-experiment-v4/supervisor.py",
+    "sha256": "a295696d249ae36b5e7d377f7055b857fe123374c829027bf8b3144d53cf6097"
+  },
+  "fovea-adaptive-experiment-v4/launch_checks.py": {
+    "source": "/workspace/fovea-adaptive-experiment-v4/launch_checks.py",
+    "sha256": "761f0a8beda8952244cc6e64c5cf1bcc4d2bbf74a0a080a9bab9f84348d898c9"
+  },
+  "fovea-adaptive-experiment-v4/run.py": {
+    "source": "/workspace/fovea-adaptive-experiment-v4/run.py",
+    "sha256": "bf297b03630c823901e59f42c2f8121f165131b22689223d015920761e8f24e0"
+  },
+  "fovea-adaptive-experiment-v4/test_transport.py": {
+    "source": "/workspace/fovea-adaptive-experiment-v4/test_transport.py",
+    "sha256": "c4cdea21a6cc61027957a9fb6b3af4b175fad8921bf10e857fd9c844e08c5e6e"
+  },
+  "fovea-adaptive-retries/retry.py": {
+    "source": "/workspace/fovea-adaptive-retries/retry.py",
+    "sha256": "10fa65ae914574ed6a8c6e3d5b609cbe75d8fd761c540a3e65ff6da3a1a635ed"
+  },
+  "fovea-adaptive-retries/analyze.py": {
+    "source": "/workspace/fovea-adaptive-retries/analyze.py",
+    "sha256": "4c814f214a37992a1e1d221d5b2795d23a165ae7e52c729c2176ca79abdbcca3"
+  },
+  "fovea-seed-budget-pilot/pilot_v2.py": {
+    "source": "/workspace/fovea-seed-budget-pilot/pilot_v2.py",
+    "sha256": "c67f9aaa45092651fbc0e9345fdc3784cc0050c0f9d72ee49c7f6de8f9dd3665"
+  },
+  "fovea-seed-budget-pilot/pilot.py": {
+    "source": "/workspace/fovea-seed-budget-pilot/pilot.py",
+    "sha256": "a093f91211ec4adf69ca9bf720c4e1f424bb3fbba7ca995509fa7332e253af89"
+  },
+  "fovea-seed-budget-pilot/test_pilot_v2.py": {
+    "source": "/workspace/fovea-seed-budget-pilot/test_pilot_v2.py",
+    "sha256": "44639abddf7facaa6c8249aa7cee6ffc7c2723aa9156b9561a3bd5f9a0f47105"
+  },
+  "fovea-seed-budget-pilot/test_pilot.py": {
+    "source": "/workspace/fovea-seed-budget-pilot/test_pilot.py",
+    "sha256": "8b1e006d0da47564cbf8e8f9bde9c68c4dc06a48d92d09d141886f41b598daef"
+  },
+  "fovea-seed-budget-pilot/supervise.py": {
+    "source": "/workspace/fovea-seed-budget-pilot/supervise.py",
+    "sha256": "8d8ce3f1336d25d5b4def9b1a3beba242ee5f2ed518edb37dce55278cbd4b73c"
+  },
+  "fovea-seed-budget-pilot/supervise_v2.py": {
+    "source": "/workspace/fovea-seed-budget-pilot/supervise_v2.py",
+    "sha256": "b5f19f3ed794096ce56574995db378bb6b46e222bfe330804408b56c8104ab59"
+  },
+  "fovea-official/src/cv_agent/policies/adaptive.py": {
+    "source": "/workspace/fovea-official/src/cv_agent/policies/adaptive.py",
+    "sha256": "a2004a448d6b5644e939949ba459a5f65db801d5b7cee39cbd70912a51601bf5"
+  },
+  "fovea-official/tests/test_adaptive.py": {
+    "source": "/workspace/fovea-official/tests/test_adaptive.py",
+    "sha256": "5779b51851bdc8a4df46d6748505e1145ac6f4d04d136edc3269461400a23cc9"
+  },
+  "fovea-official/docs/adaptive-design.md": {
+    "source": "/workspace/fovea-official/docs/adaptive-design.md",
+    "sha256": "874720240c96a55ce6a734417f902c9c0946711feebdd7b8efe2c559aadd4def"
+  },
+  "vstar-prepared/prepare.py": {
+    "source": "/workspace/vstar-prepared/prepare.py",
+    "sha256": "f029a1a7fb7b0927e568e2d9339b832edcb49714893b5ba35cbcebf8068d800a"
+  },
+  "fovea-official/LICENSE": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "LICENSE",
+    "sha256": "e5dfa5418fdff3f2104939b3f1b834c419a902304e01b14752ac47ae3f41841e"
+  },
+  "fovea-official/README.md": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "README.md",
+    "sha256": "96a33430ebd02b27c53635ce664e1c5dee570d1fe19bdd09affebb65e4f13af0"
+  },
+  "fovea-official/pyproject.toml": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "pyproject.toml",
+    "sha256": "f6e5112228cb9e949476daf54f801b8c96f89a6ea424637241b55785d5a2cf9e"
+  },
+  "fovea-official/src/cv_agent/__init__.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/__init__.py",
+    "sha256": "3199962db9c02683de57969c6e7f41e695c67a70f6b6de930c34153d49e33a39"
+  },
+  "fovea-official/src/cv_agent/agents/__init__.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/agents/__init__.py",
+    "sha256": "2b009586f0047a858265db66a5667182a56f08f365ec397b3a2c672afe8508ef"
+  },
+  "fovea-official/src/cv_agent/agents/aggregator_nodes.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/agents/aggregator_nodes.py",
+    "sha256": "fa9c82c383029bc99572fa5ae9f747348c43c1312f941fe3570c4767e237bfc7"
+  },
+  "fovea-official/src/cv_agent/agents/bed_nodes.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/agents/bed_nodes.py",
+    "sha256": "377b24c500f5c57acd02b7827bd0037aa53d6f5924c74e363157649bb2c6f958"
+  },
+  "fovea-official/src/cv_agent/agents/cv_agent_nodes.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/agents/cv_agent_nodes.py",
+    "sha256": "edfec1f1df73f859cee8e45516c05542fb07b97bccd645d8710a03d33d115211"
+  },
+  "fovea-official/src/cv_agent/benchmark_loaders/__init__.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/benchmark_loaders/__init__.py",
+    "sha256": "317460a806c191232a60f77031deb916ed9c274a4cb5fbe44a137c11e66a1020"
+  },
+  "fovea-official/src/cv_agent/benchmark_loaders/base.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/benchmark_loaders/base.py",
+    "sha256": "6e177c170e5d207c547ab8344057297816f1c62cb11a5f7161e61c6730d9006f"
+  },
+  "fovea-official/src/cv_agent/benchmark_loaders/cv_bench_loader.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/benchmark_loaders/cv_bench_loader.py",
+    "sha256": "aea6d1c758510356c2abb8090896b8bf9a69266d18550b728950476217508281"
+  },
+  "fovea-official/src/cv_agent/benchmark_loaders/hr_bench_loader.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/benchmark_loaders/hr_bench_loader.py",
+    "sha256": "c4e261a2abc66c70c9a2d4e6c79ce9547b354d517a1635082458851a3ae85bf5"
+  },
+  "fovea-official/src/cv_agent/benchmark_loaders/mme_loader.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/benchmark_loaders/mme_loader.py",
+    "sha256": "86590b3b9c7a1e541b683165ce60d1840e313208bc3f48cd06e716a9b0a423d4"
+  },
+  "fovea-official/src/cv_agent/benchmark_loaders/vstar_loader.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/benchmark_loaders/vstar_loader.py",
+    "sha256": "1156613331ec3aa073ec355b7da9b5363235028944d781779c9880e4e7b79a16"
+  },
+  "fovea-official/src/cv_agent/callbacks/__init__.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/callbacks/__init__.py",
+    "sha256": "083cf5a26ff8a25c59049775ed84aef848f9cdfdf767fb375625d0080e274cb3"
+  },
+  "fovea-official/src/cv_agent/callbacks/langfuse.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/callbacks/langfuse.py",
+    "sha256": "9aaf99deb0f678803618523704f649b38296567565a85f6f19a514502a959a1d"
+  },
+  "fovea-official/src/cv_agent/constants.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/constants.py",
+    "sha256": "5df0156ebf7dcda57659327adbf36ec9b71e16e04ae0876380b670033ae75a50"
+  },
+  "fovea-official/src/cv_agent/core/builder.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/core/builder.py",
+    "sha256": "6d3926438b3645392083e7b000adce77294199f1b6eac97f4a58f83dcd14ac53"
+  },
+  "fovea-official/src/cv_agent/core/registries.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/core/registries.py",
+    "sha256": "da79df854a34ad46ac381915a22580426cc83020d9fd6acff00d0d451530a945"
+  },
+  "fovea-official/src/cv_agent/core/state.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/core/state.py",
+    "sha256": "b054a7d2bcd212478002a0abc71ab86fe87b6bd2e710ad2e49a6665d1cd9b91b"
+  },
+  "fovea-official/src/cv_agent/main_benchmark_multi.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/main_benchmark_multi.py",
+    "sha256": "7ed52999915fd894a96811c8e93f6dc5b31ec290c6195dfa963e049e40ac9a65"
+  },
+  "fovea-official/src/cv_agent/models/__init__.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/models/__init__.py",
+    "sha256": "6077c7eb0d68adb281cc43dc3c572e1fb001c73757d23164ddb05e10beb5b94b"
+  },
+  "fovea-official/src/cv_agent/models/openai.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/models/openai.py",
+    "sha256": "f6417bb01e10c244d63c7e68ab86bb2277bf9754a29f0ad561d47cceba0b7d0e"
+  },
+  "fovea-official/src/cv_agent/policies/boed.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/policies/boed.py",
+    "sha256": "b44500837e7a68bed63910e0486e9983c517aa2d7086c96ee335a9edc19d2826"
+  },
+  "fovea-official/src/cv_agent/policies/events.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/policies/events.py",
+    "sha256": "2db947f02e0724c76c4808724ae59eb70c990f56ee17096c09b53ce8ea7b7491"
+  },
+  "fovea-official/src/cv_agent/policies/look_ahead.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/policies/look_ahead.py",
+    "sha256": "2ee8a4410b073be75b34057c32f9e92da38703d94f4f0b73d971ae5ce047f3c4"
+  },
+  "fovea-official/src/cv_agent/policies/mcmc.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/policies/mcmc.py",
+    "sha256": "ad84f257fc9fffe987c73c834e92ddb547403c5bd360e1319e66d8c11c50db0a"
+  },
+  "fovea-official/src/cv_agent/policies/utils.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/policies/utils.py",
+    "sha256": "f6a6829f859c813dba574e83856c18e13323059479b937578b9f544fa624ea2a"
+  },
+  "fovea-official/src/cv_agent/prompts/__init__.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/prompts/__init__.py",
+    "sha256": "c3b672d0a0e61915709be63379d4b4248b22ea2bb6daa691288c26f7d74485f7"
+  },
+  "fovea-official/src/cv_agent/prompts/aggregator.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/prompts/aggregator.py",
+    "sha256": "050b7e71551ecd68b1ff531f6c8fc67d9b287c14127ea4aed385c0b075bbf79e"
+  },
+  "fovea-official/src/cv_agent/prompts/direct_reasoning.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/prompts/direct_reasoning.py",
+    "sha256": "9f83593bee322cef0f420af875292ab80be06584d77d6723e0dc1dae3cbd9fa3"
+  },
+  "fovea-official/src/cv_agent/prompts/planner.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/prompts/planner.py",
+    "sha256": "3ed919805a0bced6e37a38da298d4a81cf83a3dd4edad71dbb6db18edd2c427d"
+  },
+  "fovea-official/src/cv_agent/prompts/templates/aggregator_system.j2": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/prompts/templates/aggregator_system.j2",
+    "sha256": "f59127db68b11cc4187b0b83e7d8eadd20b0d5f2bbc63f944a93c17541491d24"
+  },
+  "fovea-official/src/cv_agent/prompts/templates/boed_resolvability.md": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/prompts/templates/boed_resolvability.md",
+    "sha256": "b2156260264188cf615fd315f3727aab37164fdb1a273957f116a64c9682a9da"
+  },
+  "fovea-official/src/cv_agent/prompts/templates/direct_reasoning_system.j2": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/prompts/templates/direct_reasoning_system.j2",
+    "sha256": "01da7a7ce63bd7a753b970949ba1a0688f97672221e21e29047d4e9a51c5ae6e"
+  },
+  "fovea-official/src/cv_agent/prompts/templates/look_ahead_crop_inst.md": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/prompts/templates/look_ahead_crop_inst.md",
+    "sha256": "75216d82d148ed1df6603c44e7648854acb3de2837fae1f5fc445ac03ae5011c"
+  },
+  "fovea-official/src/cv_agent/prompts/templates/look_ahead_resolvability.md": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/prompts/templates/look_ahead_resolvability.md",
+    "sha256": "354a69c2e4ac5ea06ad4b2fc8bba6826325edae9a244e87e11a23a00ae6d3b75"
+  },
+  "fovea-official/src/cv_agent/prompts/templates/planner_react.j2": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/prompts/templates/planner_react.j2",
+    "sha256": "2b40c5b516195222ec551ccbb981e1f7c641f54b54c19465bcdfbb24afe57d1c"
+  },
+  "fovea-official/src/cv_agent/tools/__init__.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/tools/__init__.py",
+    "sha256": "4957d5e3bf9abbe608d4726b27dd4d8a06ffb0570243492afa54de8f4b3d9039"
+  },
+  "fovea-official/src/cv_agent/tools/base.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/tools/base.py",
+    "sha256": "131402b63afd2a91948597d62fe6d7ad5c00692e40155e8407c2cb288b9c1d9b"
+  },
+  "fovea-official/src/cv_agent/tools/cv_toolkit.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/tools/cv_toolkit.py",
+    "sha256": "8b78c729da5a0c07b91b7eddaea7458406442cad13485490cb68cc1b45a36464"
+  },
+  "fovea-official/src/cv_agent/utils/__init__.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/utils/__init__.py",
+    "sha256": "ee37560c9df8137a1a2706739c1ecd6bc1264e3529b7d50ea5cf8ab08e668e93"
+  },
+  "fovea-official/src/cv_agent/utils/concurrency.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/utils/concurrency.py",
+    "sha256": "0f9794e0a8b6b980c38d3b0145396ff95457e8fe68611b8e51a9010a33e8cd27"
+  },
+  "fovea-official/src/cv_agent/utils/config.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/utils/config.py",
+    "sha256": "3a4429222eb2d8e1896b2a4f21e8210c42ba6aa506c01ec0d262f28dc837df85"
+  },
+  "fovea-official/src/cv_agent/utils/grader.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/utils/grader.py",
+    "sha256": "c90a5f2d44f52ff4e152562a8d1e11ed8d444ba1aa4ba4d50fedab7d950167c1"
+  },
+  "fovea-official/src/cv_agent/utils/logging.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/utils/logging.py",
+    "sha256": "af44bf6ade7532f5d8f632ae6b40a1508867611fadbcbef70d61f26ce9d4c3a2"
+  },
+  "fovea-official/src/cv_agent/utils/qwen_vl.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/utils/qwen_vl.py",
+    "sha256": "18b0c7bed7442056b5fd08fd302c418de3e38585a9a45fe78865fed61acf655f"
+  },
+  "fovea-official/src/cv_agent/utils/storage.py": {
+    "upstream_commit": "0dc77fb69a3ae31467e2416f677fae1d21bbc498",
+    "upstream_path": "src/cv_agent/utils/storage.py",
+    "sha256": "f81e2fa79036430228d6e75f42dfad25e7afa3a8c98fa21e4c00154b4f52c3e3"
+  }
+}

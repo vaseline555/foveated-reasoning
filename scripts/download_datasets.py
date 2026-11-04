@@ -18,7 +18,7 @@ from pathlib import Path, PurePosixPath
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from active_vlm.experiment.data import catalog, select
+from scripts.benchmark_data import catalog, select
 from scripts.range_zip import RangeFile
 
 SOURCES = {
