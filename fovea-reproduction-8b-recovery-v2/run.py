@@ -278,6 +278,8 @@ def direct(client, root, case):
     row = dict(case=case['key'], method='Direct', status='complete',
                prediction=answer(message),grade=answer_grade(message),message=message,
                models=[record['model']], records=[record], crops=0,
+               interaction_turns=0, interaction_turn_limit=MAX_INTERACTION_TURNS,
+               computation_counts=computation_counts([record]),
                completed_at=time.time())
     write_result(root,'Direct',case,row)
     return row
@@ -316,6 +318,22 @@ def probe_valid(message):
     return bool(re.search(r'\b(?:yes|no)\b', message['content'], re.I))
 
 
+MAX_INTERACTION_TURNS = 10
+GREEDY_PROBES_PER_CANDIDATE = 3
+
+
+def computation_counts(records):
+    # A repaired logical call is still one call; its extra attempt is separate.
+    stages = [r.get('format_retry_of', r.get('stage', '')) for r in records]
+    return dict(
+        planner_calls=sum(s.startswith('planner_') for s in stages),
+        candidate_probe_calls=sum(s.startswith('probe_') for s in stages),
+        initial_answer_calls=sum(s == 'direct' for s in stages),
+        final_reader_calls=sum(s == 'aggregator' for s in stages),
+        format_retries=sum(bool(r.get('format_retry_of')) for r in records),
+    )
+
+
 def trajectory(client, root, case, method, baseline):
     path = result_path(root, method, case)
     existing = effective_row(root,method,case)
@@ -341,20 +359,20 @@ def trajectory(client, root, case, method, baseline):
             {'type': 'image_url', 'image_url': {'url': original_url}},
             {'type': 'text', 'text': case['question']},
             {'type': 'text', 'text': f'\nOrignal image URL: {fake_original}\n'},
-            {'type': 'text', 'text': '\nYou are on TURN 1 (max 10)'},
+            {'type': 'text', 'text': '\nYou are on TURN 1 (max 10 crop interactions). You may use the tenth crop; a separate final reader follows.'},
         ]},
     ]
     records, rounds = [], []
     crops = 0
     stop_reason = None
-    # Upstream graph recursion_limit=100; two graph nodes per search turn,
-    # plus direct/final. Keep nominal turn10 instruction, not a hard10 cutoff.
-    for turn in range(1, 50):
+    # One validated tool attempt and its observation constitute one interaction.
+    # Format retries and the final reader do not consume this budget.
+    for turn in range(1, MAX_INTERACTION_TURNS + 1):
         if turn > 1:
             history.append({'role': 'user', 'content':
                 f'SYSTEM STATUS UPDATE: You are currently on Turn {turn} out of 10.\n'
-                f'If {turn} == 10, you MUST stop calling tools and '
-                'provide your best final answer immediately in the required format.'})
+                'You may execute one crop this turn or stop early. '
+                'After the tenth crop observation the final reader will answer.'})
         message, record = call(client, root, case, method, f'planner_{turn}', history,
             lambda m: planner_valid(m, images, greedy), tools=[official.crop_tool()])
         records.append(record)
@@ -392,7 +410,7 @@ def trajectory(client, root, case, method, baseline):
                     messages = official.probe_messages(case['question'], original_image,
                         None if parent_key == fake_original else parent, candidate)
                     contents = []
-                    for draw in range(5):
+                    for draw in range(GREEDY_PROBES_PER_CANDIDATE):
                         probe, receipt = call(client, root, case, method,
                             f'probe_{turn}_{ci}_{candidate_index}_{draw}', messages, probe_valid)
                         records.append(receipt)
@@ -434,8 +452,7 @@ def trajectory(client, root, case, method, baseline):
         save(root / 'checkpoints-v2' / method / (case['key'] + '.json'),
              compact(dict(history=history, rounds=rounds, records=records), root))
     if stop_reason is None:
-        # Do not score an extra reader after exhausting upstream recursion.
-        raise RequestFailure('Official recursion-equivalent search limit reached')
+        stop_reason = 'interaction_turn_limit'
     messages = official.aggregator_messages(case['question'], original_url, history,
                                             baseline['message'].get('content') or '')
     final, record = call(client, root, case, method, 'aggregator', messages,
@@ -445,7 +462,9 @@ def trajectory(client, root, case, method, baseline):
     row = dict(case=case['key'], method=method, status='complete', prediction=answer(final),
                grade=answer_grade(final),message=final, models=models, records=records, crops=crops,
                baseline_models=baseline['models'], stop_reason=stop_reason,
-               rounds=rounds, completed_at=time.time())
+               rounds=rounds, interaction_turns=len(rounds),
+               interaction_turn_limit=MAX_INTERACTION_TURNS,
+               computation_counts=computation_counts(records), completed_at=time.time())
     write_result(root,method,case,row)
     save(root / 'trajectories' / method / (case['key'] + '.json'), compact(history, root))
     return row

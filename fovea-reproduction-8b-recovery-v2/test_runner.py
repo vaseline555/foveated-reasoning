@@ -70,6 +70,8 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(row['prediction'],'B')
         self.assertEqual(row,repeated)
         self.assertEqual(row['crops'],0)
+        self.assertEqual(row['interaction_turns'],0)
+        self.assertEqual(row['computation_counts']['initial_answer_calls'],1)
 
     def test_react_uses_requested_crop_without_probes_and_has_final_reader(self):
         client=FakeClient()
@@ -81,20 +83,69 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(row['rounds'][0]['selected'],[250,250,750,750])
         self.assertEqual(row['prediction'],'B')
 
-    def test_greedy_three_candidates_five_draws_then_commits_best(self):
+    def test_greedy_three_candidates_three_draws_then_commits_best(self):
         client=FakeClient()
         baseline=run.direct(client,self.root,self.case)
         row=run.trajectory(client,self.root,self.case,'FOVEA-Greedy',baseline)
         calls=[c for c in client.calls if c['method']=='FOVEA-Greedy']
         probes=[c for c in calls if c['stage'].startswith('probe_')]
-        self.assertEqual(len(probes),15)
-        self.assertEqual(len({c['stage'] for c in probes}),15)
-        self.assertEqual(len(calls),18)
+        self.assertEqual(len(probes),9)
+        self.assertEqual(len({c['stage'] for c in probes}),9)
+        self.assertEqual(len(calls),12)
         self.assertEqual(row['rounds'][0]['scores'],[0,1,0])
         self.assertEqual(row['rounds'][0]['selected_index'],1)
         self.assertEqual(row['crops'],1)
         for candidate in range(3):
-            self.assertEqual(sum(int(c['stage'].split('_')[-2])==candidate for c in probes),5)
+            self.assertEqual(sum(int(c['stage'].split('_')[-2])==candidate for c in probes),3)
+
+    def test_stubborn_planner_stops_after_ten_observations_then_reads(self):
+        class StubbornClient(FakeClient):
+            def call(self, messages, stage, case, method, **kwargs):
+                if stage.startswith('planner_'):
+                    message, record = super().call(messages, 'planner_1', case, method, **kwargs)
+                    self.calls[-1]['stage'] = stage
+                    record['stage'] = stage
+                    return message, record
+                return super().call(messages, stage, case, method, **kwargs)
+        for method in ('ReAct', 'FOVEA-Greedy'):
+            with self.subTest(method=method):
+                client = StubbornClient()
+                baseline = run.direct(client, self.root, self.case)
+                row = run.trajectory(client, self.root, self.case, method, baseline)
+                calls = [c for c in client.calls if c['method'] == method]
+                self.assertEqual(row['interaction_turns'], 10)
+                self.assertEqual(row['crops'], 10)
+                self.assertEqual(row['stop_reason'], 'interaction_turn_limit')
+                self.assertEqual(sum(c['stage'].startswith('planner_') for c in calls), 10)
+                self.assertEqual(calls[-1]['stage'], 'aggregator')
+                self.assertEqual(sum(
+                    item.get('type') == 'image_url'
+                    for m in calls[-1]['messages'] if isinstance(m.get('content'), list)
+                    for item in m['content']), 11)
+                self.assertEqual(row['computation_counts']['candidate_probe_calls'],
+                                 90 if method == 'FOVEA-Greedy' else 0)
+                self.assertEqual(row['computation_counts']['final_reader_calls'], 1)
+
+    def test_ten_failed_tool_attempts_consume_budget_without_probes(self):
+        class FailedCropClient(FakeClient):
+            def call(self, messages, stage, case, method, **kwargs):
+                if stage.startswith('planner_'):
+                    message, record = super().call(messages, 'planner_1', case, method, **kwargs)
+                    self.calls[-1]['stage'] = stage
+                    record['stage'] = stage
+                    args = json.loads(message['tool_calls'][0]['function']['arguments'])
+                    args['coordinates'] = [100, 100, 120, 120]
+                    message['tool_calls'][0]['function']['arguments'] = json.dumps(args)
+                    return message, record
+                return super().call(messages, stage, case, method, **kwargs)
+        client = FailedCropClient()
+        baseline = run.direct(client, self.root, self.case)
+        row = run.trajectory(client, self.root, self.case, 'FOVEA-Greedy', baseline)
+        self.assertEqual(row['interaction_turns'], 10)
+        self.assertEqual(row['crops'], 0)
+        self.assertEqual(row['computation_counts']['candidate_probe_calls'], 0)
+        self.assertEqual(client.calls[-1]['stage'], 'aggregator')
+        self.assertTrue(all('tool_error' in r for r in row['rounds']))
 
     def test_multiple_tools_rejected_before_invalid_protocol_history(self):
         client=FakeClient(tool_count=2)

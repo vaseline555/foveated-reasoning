@@ -71,6 +71,31 @@ class StateChecks(unittest.TestCase):
         adaptive._set_plan(state, initial)
         return state
 
+    async def _ten_attempt_case(self, fail=False):
+        backend = FakeBackend()
+        crops = Crops()
+        async def execute(proposal):
+            key = await crops(proposal)
+            if fail:
+                raise adaptive.CropError("failed crop")
+            return key
+        policy = adaptive.AdaptivePolicy(adaptive.Limits(
+            max_steps=50, max_model_calls=100, branch_steps=50,
+            no_progress_steps=50, max_visits=50))
+        result = await policy.run("question", "original", backend, execute)
+        self.assertEqual(result.state.steps, 10)
+        self.assertEqual(len(crops.actions), 10)
+        self.assertEqual(backend.calls.count("plan"), 1)
+        self.assertEqual(backend.calls.count("propose"), 1)
+        self.assertEqual(backend.calls.count("finalize"), 1)
+        self.assertEqual(backend.calls.count("observe"), 0 if fail else 10)
+        self.assertEqual(result.state.stop_reason, "step_limit")
+
+    def test_hard_ten_interactions_including_failed_attempts(self):
+        for fail in (False, True):
+            with self.subTest(fail=fail):
+                asyncio.run(self._ten_attempt_case(fail))
+
     def test_invalid_dag_and_unknown_references(self):
         role = adaptive.Role
         invalid = (

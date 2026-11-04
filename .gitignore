@@ -44,3 +44,8 @@ dist/
 **/round-*/
 *.sqlite*
 *.lock
+
+# Local campaign accounting and inactive provider diagnostics
+/local_campaign/budget_carryover.json
+/local_campaign/hf_*.py
+/local_campaign/test_hf_transport.py

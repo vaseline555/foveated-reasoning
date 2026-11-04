@@ -366,6 +366,23 @@ async def execute_case(case, output, client, config):
             "models": ["qwen/qwen3-vl-8b-instruct"],
             "crops": len(backend.image_registry) - 1,
             "crop_attempts": result.state.steps,
+            "interaction_turns": result.state.steps,
+            "interaction_turn_limit": min(config["limits"].get("max_steps", 10), 10),
+            "computation_counts": {
+                "initial_plan_calls": 1,
+                "candidate_generation_calls": result.state.model_calls - 2 - sum(
+                    o.candidate is not None and not o.error
+                    for o in getattr(result.state, "observations", ())
+                ),
+                "observation_calls": sum(
+                    o.candidate is not None and not o.error
+                    for o in getattr(result.state, "observations", ())
+                ),
+                "final_reader_calls": 1,
+                "format_retries": sum(
+                    bool(r.get("format_retry_of")) for r in getattr(backend, "records", [])
+                ),
+            },
             "logical_model_calls": result.state.model_calls,
             "observed_crops": sum(
                 1

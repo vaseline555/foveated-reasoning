@@ -5,21 +5,44 @@ Direct/ReAct/FOVEA-Greedy recovery v2, Adaptive V4, its execution-failure retrie
 and the completed question-conditioned seed pilot. The previous partition/recheck implementation remains available in Git history
 at commit `ef6a317`; the current default is this experiment implementation.
 `source-manifest.json` records the original paths and SHA256 of every exported
-source file. Runtime source files have not been changed by this export.
+source file. The manifest describes the original export; this checkout contains the interaction-budget revision documented below.
 
-## Actual search budgets
+## Interaction budget (local revision)
 
-| Method | Actual stopping mechanism |
-| --- | --- |
-| Direct | Original image response; no crop search |
-| ReAct / Greedy | Prompt requests termination at turn 10; executor allows turns 1–49 (`range(1, 50)`) to mirror upstream recursion_limit=100. This is not an enforced 10-turn or 3-turn cap. |
-| Adaptive V4 / retries | Hard maximum 10 crop **attempts**, 24 logical model calls including final, one bounded format repair per logical call. A crop attempt is not an API request. |
+The exported commit used a prompt-only ten-turn instruction for ReAct/Greedy,
+with an executor permitting 49 planner rounds, and five probes per Greedy
+candidate. This checkout now enforces the requested protocol below.
 
-Greedy evaluates three scale candidates with five probes per candidate. `3×5`
-is candidate/probe count, not three search turns. These runs do **not** establish
-a paper-matched three-turn comparison. Early stopping can use fewer turns.
+| Method | External interaction (hard maximum 10) | Separately counted computation |
+| --- | --- | --- |
+| Direct | None (0 interactions) | Initial answer generation |
+| ReAct | Planner decision → tool attempt → observation/error feedback | Format retry, final reader |
+| FOVEA-Greedy | Planner proposal → candidate evaluation/selection → selected crop observation/error feedback | 3 candidates × 3 probes, format retry, final reader |
+| Adaptive(Graph) | Evidence-based selection → crop attempt → observation/evidence update | Initial role plan, candidate generation, format retry, final reader |
 
-All current workers use `qwen/qwen3-vl-8b-instruct`, Parasail only, temperature 1,
+A failed tool/crop attempt consumes one interaction. Early stopping may use fewer
+than ten. ReAct/Greedy allow the tenth crop and pass its observation to the final
+reader without an eleventh planner call. Adaptive already counted crop attempts;
+its controller now also enforces the hard ceiling if configured above ten. Its
+separate 24-logical-call budget remains and can stop search earlier.
+
+New result rows expose `interaction_turns`, `interaction_turn_limit`, and
+`computation_counts`; successful crop count remains separate. Computation counts
+report logical calls by role and format retries separately; physical requests,
+including failed attempts, remain auditable in the API ledger. Direct baseline
+computation is recorded in its own row. Existing cached campaign rows are preserved
+and must not be presented as results of this revised protocol. The completed seed
+pilot retains its historical settings. Frozen campaign code hashes intentionally
+reject this modified source; use a separately prepared protocol for new runs,
+rather than changing historical config or reusing old results for this comparison.
+
+The current local Graph gate V2 runner is documented in
+[local_campaign/README.md](local_campaign/README.md). It uses a cumulative $10
+budget, a Direct-blind Graph gate followed by Direct fusion, and fair method
+round-robin dispatch with a 30/45/60-second minimum gap depending on HTTP429
+history. Runtime results, caches, ledgers and credentials are excluded from Git.
+
+The original exported cloud workers used `qwen/qwen3-vl-8b-instruct`, Parasail only, temperature 1,
 max_tokens 2048, the same cumulative $15 ledger and global 3-second dispatch gate.
 Baseline and Adaptive may overlap requests, with one request per worker. The
 $0.92410405 historical cost is already included in the campaign cap. Snapshot

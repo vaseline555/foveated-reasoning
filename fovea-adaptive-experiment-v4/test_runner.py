@@ -126,6 +126,9 @@ class RunnerTests(unittest.TestCase):
         self.assertIsNone(row["prediction"])
         self.assertEqual(row["grade"], "NO_ANSWER")
         self.assertEqual(row["answer"], "Insufficient visual evidence.")
+        self.assertEqual(row["interaction_turns"], 0)
+        self.assertEqual(row["computation_counts"]["initial_plan_calls"], 1)
+        self.assertEqual(row["computation_counts"]["final_reader_calls"], 1)
         client.release_final.assert_called_once_with("vstar_test")
 
     def test_summary_keeps_nonphysical_reservations_out_of_request_counts(self):

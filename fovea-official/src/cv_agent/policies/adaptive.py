@@ -86,6 +86,9 @@ class Observation:
     plan_version: int = 0
 
 
+MAX_INTERACTION_TURNS = 10
+
+
 @dataclass(frozen=True)
 class Limits:
     max_steps: int = 10
@@ -368,7 +371,7 @@ class AdaptivePolicy:
         allowances = state.branch_allowances
         cooldown: str | None = None
 
-        while state.steps < limits.max_steps and not answer_ready(state):
+        while state.steps < min(limits.max_steps, MAX_INTERACTION_TURNS) and not answer_ready(state):
             if state.model_calls >= limits.max_model_calls - 1:
                 state.stop_reason = "model_call_limit"
                 break
