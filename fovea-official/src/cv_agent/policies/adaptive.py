@@ -140,6 +140,7 @@ class CaseState:
     steps: int = 0
     model_calls: int = 0
     stop_reason: str = ""
+    evidence: dict[str, dict] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -237,6 +238,8 @@ def _set_plan(state: CaseState, plan: Plan) -> None:
         key: "unresolved" if key in changed else state.statuses.get(key, "unresolved")
         for key in roles
     }
+    for key in changed | (set(state.evidence) - set(roles)):
+        state.evidence.pop(key, None)
     state.stale_candidates.update(
         key
         for key, candidate in state.candidates.items()
@@ -307,6 +310,22 @@ def _record(state: CaseState, observation: Observation, limits: Limits) -> bool:
     ):
         raise ValueError("Invalid evidence report")
     before = dict(state.statuses)
+    # Rebinding an observed answer invalidates its dependent conclusions, even
+    # when the model keeps the same role definitions. Re-observed descendants
+    # in this report can subsequently become supported again.
+    changed = {key for key, claim in claims.items()
+               if key in state.evidence and
+               (state.evidence[key]["answer"] != claim.text or claim.status != "supported")}
+    affected = set(changed)
+    while True:
+        expanded = affected | {key for key, role in roles.items()
+                               if set(role.requires_for_binding) & affected}
+        if expanded == affected:
+            break
+        affected = expanded
+    for key in affected - changed:
+        state.statuses[key] = "unresolved"
+        state.evidence.pop(key, None)
     pending = set(claims)
     # Process prerequisites first even when the model reports claims out of order.
     while pending:
@@ -324,6 +343,11 @@ def _record(state: CaseState, observation: Observation, limits: Limits) -> bool:
                 # automatically confirmed when an anchor is discovered later.
                 status = "partial"
             state.statuses[key] = status
+            state.evidence[key] = dict(
+                answer=claim.text, status=status, image_key=observation.image_key,
+                observation_index=len(state.observations),
+                uncertainty="model_claim" if status == "supported" else status,
+            )
             pending.remove(key)
             break
     state.observations.append(observation)
@@ -335,17 +359,47 @@ def _record(state: CaseState, observation: Observation, limits: Limits) -> bool:
     )
 
 
+def goal_closure(state: CaseState) -> set[str]:
+    roles = _roles(state.plan)
+    needed = set(state.plan.goals)
+    pending = list(needed)
+    while pending:
+        for parent in roles[pending.pop()].requires_for_binding:
+            if parent not in needed:
+                needed.add(parent)
+                pending.append(parent)
+    return needed
+
+
+def evidence_summary(state: CaseState) -> dict:
+    """Grounded partial answers, not expected-evidence tasks or truth labels."""
+    needed = goal_closure(state)
+    roles = _roles(state.plan)
+    depth = {}
+    def level(key):
+        if key not in depth:
+            depth[key] = 1 + max((level(p) for p in roles[key].requires_for_binding), default=0)
+        return depth[key]
+    return dict(goals=list(state.plan.goals),
+                dependency_depth=max(level(k) for k in state.plan.goals),
+                nodes={k: dict(question=roles[k].expected_evidence,
+                               inputs=list(roles[k].requires_for_binding),
+                               status=state.statuses.get(k, "unresolved"),
+                               evidence=state.evidence.get(k)) for k in sorted(needed)})
+
+
 def _priority(state: CaseState, candidate: Candidate) -> float:
-    roles = {r.id: r for r in state.plan.roles}
-    unresolved = [key for key in candidate.role_ids if key in roles and not supported(state, key)]
-    return sum(
-        roles[key].importance
-        + sum(
-            key in role.requires_for_binding and not supported(state, role.id)
-            for role in roles.values()
-        )
-        for key in unresolved
+    roles = _roles(state.plan)
+    needed = goal_closure(state)
+    weights = {"unresolved": 1.0, "partial": 0.5, "conflicting": 1.5, "supported": 0.0}
+    benefit = sum(
+        roles[key].importance * weights.get(state.statuses.get(key, "unresolved"), 1.0)
+        + sum(key in roles[other].requires_for_binding and not supported(state, other)
+              for other in needed)
+        for key in candidate.role_ids if key in needed and not supported(state, key)
     )
+    # A deterministic information-value proxy; not calibrated probabilities or dollars.
+    return benefit / (1 + state.candidate_steps.get(candidate.id, 0))
 
 
 class AdaptivePolicy:
@@ -448,7 +502,8 @@ class AdaptivePolicy:
                     limits,
                 )
             stalls[active] = 0 if progress else stalls[active] + 1
-            important = _priority(state, chosen) > 1
+            important = any(r.importance > 1 for r in state.plan.roles
+                            if r.id in chosen.role_ids and r.id in goal_closure(state))
             if progress and important:
                 allowances[active] = min(
                     limits.branch_steps + limits.progress_bonus, allowances[active] + 1

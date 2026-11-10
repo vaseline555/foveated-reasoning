@@ -591,7 +591,7 @@ class BackendTests(unittest.TestCase):
         self.assertEqual(report.claims[0].status, "partial")
         self.assertEqual(len(client.calls), 2)
 
-    def test_final_reader_sees_all_executed_observations_original_and_direct(self):
+    def test_final_reader_sees_current_evidence_original_and_direct(self):
         instance, client = self.build(
             [{"role": "assistant", "content": "<answer>B</answer>"}]
         )
@@ -619,10 +619,10 @@ class BackendTests(unittest.TestCase):
             if isinstance(msg.get("content"), list)
             for block in msg["content"]
         )
-        self.assertEqual(image_count, 3)
+        self.assertEqual(image_count, 2)
         text = json.dumps(messages)
+        self.assertNotIn("Actual observation 0", text)
         for expected in (
-            "Actual observation 0",
             "Actual observation 1",
             "Independent Direct analysis",
             "support statuses are model claims",

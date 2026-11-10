@@ -1,7 +1,7 @@
 """Graph-only categorical judgment, followed by independent Direct fusion."""
 from pathlib import Path
 import json
-from backend import Backend, _save_new, serializable, validate_schema, _json
+from backend import adaptive, official, Backend, _save_new, serializable, validate_schema, _json
 
 GATE_SCHEMA={
  'type':'object','required':['answer','rationale','evidence','uncertainties'],
@@ -28,6 +28,18 @@ def store(path,value):
 
 
 class GraphGateBackend(Backend):
+    # Explicit ablations share the same exploration snapshot and validator.
+    reader_mode = "common_direct"
+
+    def reader_messages(self, state, gate):
+        if self.reader_mode == "legacy_fusion":
+            return self.fusion_messages(state, gate)
+        if self.reader_mode not in {"common_direct", "common_no_direct"}:
+            raise ValueError("Unknown Graph reader mode")
+        direct = (self.direct_baseline['message'].get('content') or '') if self.reader_mode == "common_direct" else ''
+        return official.aggregator_messages(self.case['question'], self.image_urls['original'],
+                                            self._aggregator_history(state), direct)
+
     def gate_messages(self,state):
         # This builder intentionally does not access self.direct_baseline.
         messages=self._messages(GATE_INSTRUCTION,state)
@@ -44,6 +56,9 @@ class GraphGateBackend(Backend):
             raise ValueError('A categorical gate answer requires recorded evidence')
         for ref in value['evidence']:
             i=ref['observation_index']
+            current=state.evidence.get(ref['role_id'])
+            if current is None or current['observation_index'] != i:
+                raise ValueError('Citation references invalidated or superseded evidence')
             if i>=len(state.observations):raise ValueError('Unknown observation index')
             observation=state.observations[i]
             if observation.error or observation.image_key!=ref['image_key']:
@@ -60,6 +75,7 @@ class GraphGateBackend(Backend):
 
     async def finalize(self,state):
         self._event('state_before_gate',state=state,images=self.image_registry)
+        store(self.outputdir/'composition.json', adaptive.evidence_summary(state))
         gate=self._call('graph_gate',self.gate_messages(state),
                         lambda value:self.validate_gate(value,state),'submit_graph_gate',GATE_SCHEMA)
         self.gate_result=gate
@@ -73,6 +89,6 @@ class GraphGateBackend(Backend):
             match=re.search(r'<answer>\s*(A|B|C|D|NO_ANSWER)\s*</answer>',text,re.I)
             if not match:raise ValueError('Final answer requires an explicit option or NO_ANSWER tag')
             return text
-        final=self._call('aggregator',self.fusion_messages(state,gate),validate)
-        store(self.outputdir/'aggregator.json',{'answer_text':final})
+        final=self._call('aggregator',self.reader_messages(state,gate),validate)
+        store(self.outputdir/'aggregator.json',{'answer_text':final, 'reader_mode':self.reader_mode})
         return final

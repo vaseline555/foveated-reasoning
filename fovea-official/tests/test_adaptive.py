@@ -399,3 +399,42 @@ class ControllerChecks(unittest.IsolatedAsyncioTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CompositionalChecks(unittest.TestCase):
+    def state(self):
+        p = adaptive.Plan((adaptive.Role('object', 'object', 'Which object?'),
+                           adaptive.Role('color', 'color', 'What color?', ('object',)),
+                           adaptive.Role('unused', 'unused', 'Irrelevant detail')),
+                          ('color',))
+        s = adaptive.CaseState('question', 'original', p)
+        s.image_keys.add('original')
+        adaptive._set_plan(s, p)
+        return s
+
+    def record(self, s, *claims):
+        adaptive._record(s, adaptive.Observation(None, 'original', adaptive.Report(claims)), adaptive.Limits())
+
+    def test_rebinding_invalidates_descendant_evidence(self):
+        s = self.state()
+        self.record(s, adaptive.Claim('object', 'left car', 'supported'),
+                    adaptive.Claim('color', 'red', 'supported'))
+        self.assertTrue(adaptive.answer_ready(s))
+        self.record(s, adaptive.Claim('object', 'right car', 'supported'))
+        self.assertFalse(adaptive.answer_ready(s))
+        self.assertNotIn('color', s.evidence)
+        self.record(s, adaptive.Claim('color', 'blue', 'supported'))
+        self.assertTrue(adaptive.answer_ready(s))
+        summary = adaptive.evidence_summary(s)
+        self.assertEqual(summary['dependency_depth'], 2)
+        self.assertNotIn('unused', summary['nodes'])
+        self.assertEqual(summary['nodes']['color']['evidence']['observation_index'], 2)
+
+    def test_irrelevant_candidates_and_repeated_cost(self):
+        s = self.state()
+        irrelevant = candidate(roles=('unused',))
+        useful = candidate(roles=('object',))
+        self.assertEqual(adaptive._priority(s, irrelevant), 0)
+        first = adaptive._priority(s, useful)
+        s.candidate_steps[useful.id] = 1
+        self.assertLess(adaptive._priority(s, useful), first)

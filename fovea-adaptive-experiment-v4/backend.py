@@ -22,8 +22,8 @@ from typing import Any
 from jsonschema import Draft202012Validator
 from PIL import Image
 
-POLICY_PATH = Path("/workspace/fovea-official/src/cv_agent/policies/adaptive.py")
-ADAPTER_PATH = Path("/workspace/fovea-reproduction-8b-recovery-v2/official_adapter.py")
+POLICY_PATH = Path(__file__).resolve().parents[1] / "fovea-official/src/cv_agent/policies/adaptive.py"
+ADAPTER_PATH = Path(__file__).resolve().parents[1] / "fovea-reproduction-8b-recovery-v2/official_adapter.py"
 METHOD = "ADAPTIVE_V4"
 MODEL = "qwen/qwen3-vl-8b-instruct"
 SCHEMA_VALIDATOR_VERSION = version("jsonschema")
@@ -383,6 +383,7 @@ PLAN_INSTRUCTION = (
     "Decompose the question and options into at most 8 necessary object/relation/evidence roles. "
     "Each role has id, role, expected_evidence, requires_for_binding (role IDs needed to bind its "
     "identity/conclusion, not to permit looking), and importance (normally 1; key anchor 2). "
+    "In expected_evidence specify a concrete subquestion and the required answer type. "
     "Use an acyclic dependency graph. goals is a nonempty list of EXACT roles[].id strings, "
     "never natural-language tasks. For example, if roles contain IDs 'object' and 'answer_color', "
     'use {"goals":["answer_color"]}, NOT {"goals":["color of the object"]}. Every requires_for_binding '
@@ -406,6 +407,8 @@ PROPOSE_INSTRUCTION = (
     "when no useful alternative exists. No overlap/area/distance preprocessing is applied."
 )
 OBSERVE_INSTRUCTION = (
+    "In each claim text, state the partial answer, distinguish direct observation from inference, "
+    "and name any remaining ambiguity. Repair conflicting roles locally before unrelated exploration. "
     "Inspect the newly executed crop and the question in context. Report claims only for "
     "evidence actually visible, with role_id, concise text and status unresolved/partial/"
     "supported/conflicting. Preserve uncertainty and distinguish missing target from an "
@@ -917,7 +920,12 @@ class Backend:
             {"role": "system", "content": "Adaptive visual evidence report."},
             {"role": "user", "content": self.case["question"]},
         ]
+        summary = adaptive.evidence_summary(state)
+        selected = {node["evidence"]["observation_index"] for node in summary["nodes"].values()
+                    if node["evidence"] is not None}
         for index, observation in enumerate(state.observations):
+            if index not in selected:
+                continue
             description = _json(observation)
             if observation.candidate is None or observation.error:
                 history.append({"role": "assistant", "content": description})
@@ -953,7 +961,7 @@ class Backend:
             {
                 "role": "assistant",
                 "content": "Adaptive role/evidence state; support statuses are model claims, not verified truth:\n"
-                + self._context(state),
+                + _json(summary),
             }
         )
         return history

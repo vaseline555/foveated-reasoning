@@ -54,6 +54,17 @@ class GateTests(unittest.TestCase):
             self.assertEqual(json.loads((b.outputdir/'gate.json').read_text())['answer'],'A')
             self.assertTrue((b.outputdir/'aggregator.json').exists())
 
+    def test_common_reader_modes_exclude_gate_and_control_direct(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            b,state,_=self.setup_backend(Path(tmp))
+            for mode in ('common_direct', 'common_no_direct', 'legacy_fusion'):
+                b.reader_mode=mode
+                text=json.dumps(b.reader_messages(state, {'rationale':'GATE_CANARY'}))
+                self.assertEqual('DIRECT_CANARY_SECRET' in text, mode != 'common_no_direct')
+                self.assertEqual('GATE_CANARY' in text, mode == 'legacy_fusion')
+            b.reader_mode='invalid'
+            with self.assertRaises(ValueError): b.reader_messages(state, {})
+
     def test_rejects_fabricated_citations_and_absent_options(self):
         with tempfile.TemporaryDirectory() as tmp:
             b,state,_=self.setup_backend(Path(tmp))

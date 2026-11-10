@@ -101,3 +101,41 @@ policy = AdaptivePolicy(Limits(max_steps=10, max_model_calls=24))
 result = await policy.run(question, "original", backend, crop_executor)
 # result.answer: 최종 답변 / result.state: 계획·후보·관측·분기 사용량
 ```
+
+
+## Compositional Graph revision
+
+Roles define concrete subquestions and expected answer types; binding edges are
+explicit inputs. Claims carry a partial answer (text), uncertainty/status and
+controller-recorded observation/image provenance. Support remains a model claim,
+not a verified truth label. A change in an observed answer invalidates downstream
+answers even without a plan edit. Re-observed descendants can be supported again.
+Text changes conservatively trigger invalidation, including harmless paraphrases.
+
+Search ranks only the goal dependency closure. Unresolved/partial/conflicting
+weights are 1/0.5/1.5, multiplied by role importance, with a dependency bonus and
+a repeated-candidate cost divisor. This is a heuristic, not calibrated information
+gain or actual dollar estimation. Branch budgets and the ten-interaction hard cap
+still apply. Conflict repair is local to affected roles and their prerequisites.
+
+The common reader receives current relevant observations and a compact node
+summary, rather than obsolete partial answers and the entire search state.
+Graph gate citations must reference the current evidence for a role. The default
+Graph reader is now `common_direct`: official aggregator prompt with Direct
+analysis and no gate answer. `common_no_direct` removes Direct analysis;
+`legacy_fusion` retains the old gate-plus-Direct prompt. Set `reader_mode` on the
+backend before finalization. All modes retain the independent, persisted gate;
+therefore this ablation does not save the gate call. It controls reader inputs.
+No additional model calls are introduced by prioritization or summaries.
+
+`composition.json` records goal nodes, current partial answers, provenance and
+structural dependency depth. Depth 1/2/3+ provides a reproducible structural
+stratification, not semantic labels such as attribute/relation/reference.
+Partial-answer accuracy requires independent node annotations; support rates
+must never be reported as accuracy. Compare final accuracy, NO_ANSWER and costs
+on identical completed case IDs, separately by depth and reader mode. The helper
+`local_campaign/composition_report.py` reads artifacts without API calls.
+
+Existing campaign source snapshots, rows and ledgers are immutable: this revision
+applies to repository code and future runs, not the already measured $10 run.
+Do not mix their scores. No paid validation experiment was launched for this change.
